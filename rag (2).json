@@ -1,0 +1,316 @@
+{
+  "name": "rag",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "yruttiotio",
+        "formDescription": "..",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "uploud files",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "67f75281-b658-4b1f-81bd-5a50ed4d105e",
+      "name": "On form submission",
+      "webhookId": "39e338aa-8c77-401c-bace-4be444e532d1"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "3fabf51e-e00a-40f2-8cd8-c1e1505af0ef",
+      "name": "Simple Vector Store",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        176
+      ],
+      "id": "b5a92265-daf2-498d-952a-919ecc19eb1c",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 150,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        288,
+        368
+      ],
+      "id": "b86ef4a8-cc05-4db4-b214-ebe828aa8689",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        16,
+        304
+      ],
+      "id": "be52822b-b2d7-43c4-99ae-a12e076478e8",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FdevYOnCEDEMeZ2P",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Nour Elshikh. How can I assist you today?",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        848,
+        0
+      ],
+      "id": "b1ce8918-1464-46c9-b9d0-159be767f518",
+      "name": "When chat message received",
+      "webhookId": "1fae1be7-45be-4056-b798-214e6edb08b0"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "83a05ea3-3966-4325-9d15-a2b8b623d1ee",
+      "name": "AI Agent",
+      "notes": "You are an HR assistant and a general helper.\n\nRules:\n1. For company policy questions, always search the hr_policies tool before answering. Quote numbers, dates, and limits exactly, and end the answer with the source (e.g., Source: Leave Policy).\n2. If a company policy question is not covered in the documents, say: \"I couldn't find this in the company policies. Please contact HR at hr@company.com.\"\n3. For general or external questions (unrelated to company policies), use your general knowledge to answer helpfully, clearly, and accurately without needing the hr_policies tool.\n4. Keep answers short and clear, using bullet points for steps or lists when appropriate.\n5. Reply in the same language the employee used."
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 6
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        1088,
+        208
+      ],
+      "id": "4262541f-a0f9-4aa4-a822-7d2569cfbd1e",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        288
+      ],
+      "id": "ae0d15be-f0e2-42b7-9713-86fe20234df1",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FdevYOnCEDEMeZ2P",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-flash-lite-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        944,
+        208
+      ],
+      "id": "5aea1748-af46-41e1-a829-fe616cd0d4fb",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FdevYOnCEDEMeZ2P",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "nour",
+        "memoryKey": {
+          "__rl": true,
+          "value": "vector_store_key",
+          "mode": "list",
+          "cachedResultName": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        1392,
+        144
+      ],
+      "id": "4643a530-4da9-496c-ab9c-004e7a6f11cd",
+      "name": "Simple Vector Store1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "mDggS0SJe3mZLdPd",
+    "timezone": "Africa/Cairo",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "44558532-bd9e-4449-a877-89dc517e06a2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b97ff3ce1e47f6b6a41656b56dc609cf5640c941486eacfa0814c523fed5bc66"
+  },
+  "nodeGroups": [],
+  "id": "TYYbzSc5zngsyE8i",
+  "tags": []
+}

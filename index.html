@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SM Company (OMNA People) — AI Recruitment & HR Portal ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=Quicksand:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root, html[data-theme="light"] {
+  --bg: #fff8fb;
+  --bg-elev: #fff0f6;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-solid: #ffffff;
+  --surface-input: #ffffff;
+  --border: rgba(244, 114, 182, 0.25);
+  --border-glow: rgba(236, 72, 153, 0.5);
+  --p: #ec4899;
+  --p2: #f472b6;
+  --p3: #c084fc;
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --err: #f43f5e;
+  --ink: #4a1d35;
+  --mute: #9d5c7d;
+  --shadow: 0 20px 50px rgba(236, 72, 153, 0.12);
+  --blob-op: 0.45;
+}
+html[data-theme="dark"] {
+  --bg: #1a0b14;
+  --bg-elev: #26101e;
+  --surface: rgba(43, 18, 33, 0.82);
+  --surface-solid: #2b1221;
+  --surface-input: rgba(26, 11, 20, 0.9);
+  --border: rgba(244, 114, 182, 0.22);
+  --border-glow: rgba(244, 114, 182, 0.55);
+  --p: #f472b6;
+  --p2: #fb7185;
+  --p3: #c084fc;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --err: #fb7185;
+  --ink: #fdf2f8;
+  --mute: #f9a8d4;
+  --shadow: 0 24px 65px rgba(0, 0, 0, 0.5);
+  --blob-op: 0.25;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 500 16px/1.65 "Plus Jakarta Sans", "Quicksand", "Cairo", system-ui, sans-serif;
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+h1, h2, h3, h4 { font-family: "Quicksand", "Cairo", sans-serif; line-height: 1.18; letter-spacing: -0.02em; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--p); outline-offset: 3px; }
+
+/* Cute Floating Blobs & Sparkles */
+.blob {
+  position: fixed;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(95px);
+  opacity: var(--blob-op);
+  pointer-events: none;
+  animation: floatBlob 12s ease-in-out infinite alternate;
+}
+@keyframes floatBlob {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  100% { transform: translate(30px, -30px) scale(1.1) rotate(8deg); }
+}
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes sparklePulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+/* Navbar */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 5vw;
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1.5px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; margin-right: auto; }
+.brand i {
+  font-style: normal; font-size: 15px; width: 38px; height: 38px; border-radius: 14px;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--p), var(--p2), var(--p3));
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.38);
+}
+.brand small { color: var(--mute); font-weight: 600; font-size: 13px; }
+nav > a:not(.btn), .dd > button {
+  color: var(--mute); font: 700 14px "Quicksand", "Cairo", sans-serif; padding: 8px 14px;
+  border-radius: 99px; background: none; border: 0; cursor: pointer; transition: all 0.25s;
+}
+nav > a:not(.btn):hover, .dd:hover > button {
+  color: var(--p); background: rgba(236, 72, 153, 0.1); transform: translateY(-1px);
+}
+.dd { position: relative; }
+.dd div {
+  display: none; position: absolute; top: 100%; left: 0; min-width: 265px; padding: 10px;
+  background: var(--surface-solid); border: 1.5px solid var(--border); border-radius: 20px; box-shadow: var(--shadow);
+}
+.dd:hover div, .dd:focus-within div { display: block; }
+.dd div a { display: block; padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 13.5px; transition: all 0.2s; }
+.dd div a small { display: block; color: var(--mute); font-weight: 500; font-size: 12px; }
+.dd div a:hover { background: var(--bg-elev); color: var(--p); transform: translateX(4px); }
+
+.theme-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 15px; border-radius: 999px; border: 1.5px solid var(--border);
+  background: var(--surface-input); color: var(--ink); font: 700 12.5px "Quicksand", sans-serif;
+  cursor: pointer; transition: all 0.25s;
+}
+.theme-btn:hover { border-color: var(--p); transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 16px rgba(236, 72, 153, 0.18); }
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px;
+  border-radius: 999px; font-size: 12.5px; font-weight: 700; border: 1.5px solid var(--border);
+  background: var(--surface-input); color: var(--ink); cursor: pointer; transition: all 0.25s;
+}
+.status-pill:hover { border-color: var(--p); transform: translateY(-1px); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--warn); }
+.status-pill.on { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35); color: var(--ok); }
+.status-pill.on .dot { background: var(--ok); box-shadow: 0 0 10px var(--ok); animation: sparklePulse 1.8s infinite; }
+.status-pill.off { background: rgba(244, 63, 94, 0.12); border-color: rgba(244, 63, 94, 0.35); color: var(--err); }
+.status-pill.off .dot { background: var(--err); }
+
+/* Cute Pill Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+  border: 1.5px solid transparent; font: 700 14.5px "Quicksand", "Cairo", sans-serif; color: #fff;
+  background: linear-gradient(135deg, var(--p), var(--p2), var(--p3));
+  padding: 12px 24px; border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(236, 72, 153, 0.3);
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btn:hover { box-shadow: 0 12px 28px rgba(236, 72, 153, 0.45); transform: translateY(-3px) scale(1.02); }
+.btn.o { background: var(--surface-input); color: var(--p); border-color: var(--border); box-shadow: 0 4px 14px rgba(236, 72, 153, 0.08); }
+.btn.o:hover { border-color: var(--p); background: var(--bg-elev); }
+.btn.sm { padding: 8px 18px; font-size: 13px; }
+
+section { max-width: 1160px; margin: 0 auto; padding: 76px 5vw 0; }
+.hero { display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 44px; align-items: center; padding-top: 52px; }
+.cute-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px;
+  background: var(--bg-elev); border: 1.5px solid var(--border); color: var(--p);
+  font-size: 13px; font-weight: 700; margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(236, 72, 153, 0.1);
+}
+h1 {
+  font-size: clamp(34px, 4.8vw, 56px); font-weight: 800;
+  background: linear-gradient(135deg, var(--ink) 20%, var(--p) 75%, var(--p3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.lead { color: var(--mute); font-size: 17px; max-width: 54ch; margin: 18px 0 28px; }
+.hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Floating Telemetry Card */
+.mock {
+  background: var(--surface); backdrop-filter: blur(18px); border: 2px solid var(--border);
+  border-radius: 28px; padding: 26px; box-shadow: var(--shadow);
+  animation: floatCard 6s ease-in-out infinite;
+}
+.mock h4 { font-size: 13px; color: var(--p); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; font-weight: 800; }
+.row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 15px;
+  background: var(--surface-input); border: 1.5px solid var(--border); border-radius: 18px; margin-bottom: 10px; font-size: 14px;
+  transition: transform 0.2s;
+}
+.row:hover { transform: scale(1.015); }
+.av {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #fce7f3, #f3e8ff);
+  border: 1.5px solid var(--border); display: grid; place-items: center; font-weight: 800; color: var(--p);
+}
+.sc { margin-left: auto; font-weight: 800; font-size: 18px; color: var(--p); }
+.chip {
+  font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 99px;
+  background: var(--bg-elev); color: var(--p); border: 1px solid var(--border);
+}
+.chip.g { background: rgba(16, 185, 129, 0.14); color: var(--ok); border-color: rgba(16, 185, 129, 0.3); }
+.bar { height: 9px; border-radius: 99px; background: var(--bg-elev); margin: 7px 0 15px; overflow: hidden; border: 1px solid var(--border); }
+.bar i { display: block; height: 100%; width: var(--w); background: linear-gradient(90deg, var(--p), var(--p2), var(--p3)); border-radius: 99px; }
+
+/* Stack Pills */
+.stack { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding: 42px 5vw 0; max-width: 1160px; margin: 0 auto; }
+.stack span {
+  font-weight: 700; font-size: 13.5px; color: var(--p); background: var(--surface);
+  border: 1.5px solid var(--border); border-radius: 99px; padding: 8px 20px;
+  box-shadow: 0 6px 16px rgba(236, 72, 153, 0.08); transition: all 0.25s;
+}
+.stack span:hover { transform: translateY(-3px) scale(1.04); border-color: var(--p); }
+.stack p { width: 100%; text-align: center; color: var(--mute); font-size: 13.5px; margin-bottom: 4px; font-weight: 600; }
+
+h2 { font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; }
+.sub { color: var(--mute); max-width: 62ch; margin: 10px 0 26px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+.tabs button {
+  cursor: pointer; font: 700 14px "Quicksand", "Cairo", sans-serif; padding: 10px 20px; border-radius: 99px;
+  border: 1.5px solid var(--border); background: var(--surface-input); color: var(--mute);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tabs button:hover { color: var(--p); border-color: var(--p); transform: translateY(-2px); }
+.tabs button.on {
+  background: linear-gradient(135deg, var(--p), var(--p2), var(--p3));
+  border-color: transparent; color: #fff; box-shadow: 0 8px 22px rgba(236, 72, 153, 0.35);
+}
+
+/* Offer / Workflow Box */
+.offer {
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 32px; padding: 32px;
+  border-radius: 28px; background: var(--surface); border: 2px solid var(--border); box-shadow: var(--shadow);
+}
+.offer h3 { font-size: 24px; margin-bottom: 10px; color: var(--p); }
+.offer p { color: var(--mute); margin-bottom: 18px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.steps { display: grid; gap: 9px; align-content: start; }
+.steps div {
+  background: var(--surface-input); border: 1.5px solid var(--border); border-radius: 14px;
+  padding: 11px 16px; font-weight: 600; font-size: 13.5px; font-family: "JetBrains Mono", monospace;
+  transition: all 0.2s;
+}
+.steps div:hover { border-color: var(--p); transform: translateX(5px); background: var(--bg-elev); }
+
+/* Cards Grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+.card {
+  padding: 26px; border: 2px solid var(--border); border-radius: 24px; background: var(--surface);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 30px rgba(236, 72, 153, 0.06);
+}
+.card:hover { border-color: var(--p); box-shadow: var(--shadow); transform: translateY(-6px); }
+.card b {
+  display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.16), rgba(192, 132, 252, 0.16));
+  color: var(--p); margin-bottom: 14px; font-size: 16px;
+}
+.card h4 { font-size: 17.5px; margin-bottom: 6px; }
+.card p { color: var(--mute); font-size: 14px; }
+
+/* Portal & Chat */
+.portal {
+  border: 2px solid var(--border); border-radius: 28px; padding: 28px;
+  background: var(--surface); backdrop-filter: blur(18px); box-shadow: var(--shadow);
+}
+.chat-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.quick-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.quick-chips button {
+  font: 700 12.5px "Quicksand", "Cairo", sans-serif; padding: 7px 14px; border-radius: 99px;
+  border: 1.5px solid var(--border); background: var(--surface-input); color: var(--p); cursor: pointer; transition: all 0.2s;
+}
+.quick-chips button:hover { background: var(--bg-elev); border-color: var(--p); transform: translateY(-2px); }
+#log {
+  height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+  padding: 18px; border-radius: 22px; background: var(--bg-elev); border: 1.5px solid var(--border); margin-bottom: 14px;
+}
+.m { max-width: 82%; padding: 12px 18px; border-radius: 20px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
+.m.u {
+  align-self: flex-end; background: linear-gradient(135deg, var(--p), var(--p2), var(--p3));
+  color: #fff; border-bottom-right-radius: 6px; box-shadow: 0 6px 18px rgba(236, 72, 153, 0.25);
+}
+.m.b {
+  align-self: flex-start; background: var(--surface-solid); border: 1.5px solid var(--border);
+  color: var(--ink); border-bottom-left-radius: 6px; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.06);
+}
+.m.b strong { color: var(--p); }
+.m.err { background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.35); color: var(--err); }
+.err-help { margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(244, 63, 94, 0.3); font-size: 13px; color: var(--mute); }
+#cf { display: flex; gap: 10px; }
+#ci {
+  flex: 1; background: var(--surface-input); border: 1.5px solid var(--border); border-radius: 99px;
+  padding: 13px 20px; font: inherit; color: var(--ink); transition: all 0.2s;
+}
+#ci:focus { border-color: var(--p); box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15); outline: none; }
+
+/* Forms */
+.custom-form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+  background: var(--bg-elev); padding: 28px; border-radius: 24px; border: 1.5px solid var(--border);
+}
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 13.5px; font-weight: 700; color: var(--ink); display: flex; justify-content: space-between; align-items: center; }
+.field label span { color: var(--p); font-size: 12px; }
+.field input, .field select, .field textarea {
+  background: var(--surface-input); border: 1.5px solid var(--border); border-radius: 14px;
+  padding: 12px 16px; font: inherit; font-size: 14.5px; color: var(--ink); transition: all 0.2s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--p); box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15); outline: none;
+}
+.dropzone {
+  border: 2px dashed var(--p2); border-radius: 20px; padding: 26px; text-align: center;
+  background: var(--surface-input); cursor: pointer; transition: all 0.25s; position: relative;
+}
+.dropzone:hover { border-color: var(--p); background: rgba(236, 72, 153, 0.05); transform: scale(1.01); }
+.dropzone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.dropzone-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--p); }
+.dropzone-sub { font-size: 12.5px; color: var(--mute); }
+.file-badge {
+  display: inline-block; margin-top: 8px; padding: 5px 14px; border-radius: 99px;
+  background: rgba(236, 72, 153, 0.14); color: var(--p); font-size: 12.5px; font-weight: 700;
+}
+.form-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; }
+
+/* Pipeline Diagram */
+#viz { width: 100%; height: auto; display: block; }
+#viz text { fill: var(--ink); font: 700 13px "Quicksand", sans-serif; }
+#viz .s { fill: var(--mute); font-weight: 600; font-size: 11px; }
+#viz .n rect { fill: var(--surface-solid); stroke-width: 2.2; }
+#viz .e { fill: none; stroke: var(--border); stroke-width: 2.2; stroke-dasharray: 6 6; }
+
+/* CTA & Footer */
+.cta {
+  margin: 84px 5vw 0; padding: 56px 5vw; border-radius: 32px; text-align: center; color: #fff;
+  background: linear-gradient(135deg, #ec4899, #f472b6 52%, #c084fc);
+  box-shadow: 0 24px 60px rgba(236, 72, 153, 0.3);
+}
+.cta h2 { margin: 0 auto 22px; max-width: 22ch; color: #fff; }
+.cta .btn { background: #fff; color: var(--p); border-color: #fff; margin: 0 6px 8px; }
+footer { max-width: 1160px; margin: 0 auto; padding: 44px 5vw; display: flex; flex-wrap: wrap; gap: 12px 28px; color: var(--mute); font-size: 14px; }
+footer b { margin-right: auto; color: var(--p); }
+@media (max-width: 860px) {
+  .hero, .offer, .custom-form-grid { grid-template-columns: 1fr; }
+  nav > a:not(.btn), .dd { display: none; }
+  .m { max-width: 92%; }
+}
+</style>
+</head>
+<body>
+<div class="blob" style="width:520px;height:520px;background:#fbcfe8;top:-140px;right:-100px"></div>
+<div class="blob" style="width:460px;height:460px;background:#f5d0fe;top:420px;left:-140px"></div>
+<div class="blob" style="width:380px;height:380px;background:#fecdd3;bottom:80px;right:10%"></div>
+
+<nav>
+  <a class="brand" href="#"><i>🌸</i>SM Company <small>OMNA People AI ✨</small></a>
+  <div class="dd"><button type="button" aria-haspopup="true">Workflows ▾</button><div id="menu"></div></div>
+  <a href="#how">Architecture</a>
+  <a href="#pipeline">Pipeline</a>
+  <a href="#portal">Live Portal</a>
+  <button type="button" id="statusBtn" class="status-pill" onclick="window.checkServerStatus()" title="Click to re-check n8n server connection">
+    <span class="dot"></span>
+    <span id="statusTxt">Checking…</span>
+  </button>
+  <button type="button" id="themeToggle" class="theme-btn" onclick="window.toggleSiteTheme()" title="Switch Cute Pink / Dark Plum Mode">
+    <span id="themeIcon">🌙</span> <span id="themeLabel">Dark</span>
+  </button>
+  <a class="btn sm" href="#portal" onclick="window.switchPortalTab('apply')">Apply Now 💖</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="cute-badge">🌷 Smart, Fair &amp; Effortless AI Hiring</div>
+    <h1>The AI recruitment platform for faster, fairer hiring.</h1>
+    <p class="lead">Applications come in, AI screens every CV with OCR, candidates receive instant multi-agent coaching, and employees get bilingual HR policy answers in English &amp; العربية. Five live n8n workflows working together seamlessly.</p>
+    <div class="hero-btns">
+      <a class="btn" href="#portal" onclick="window.switchPortalTab('apply')">✨ Apply for a Job</a>
+      <a class="btn o" href="#portal" onclick="window.switchPortalTab('coach')">🎀 Get AI CV Coaching</a>
+      <a class="btn o" href="#portal" onclick="window.switchPortalTab('chat')">💬 Ask HR Assistant</a>
+    </div>
+  </div>
+  <div class="mock" aria-label="Example of an AI screening result">
+    <h4>🌸 Live AI Screening Result</h4>
+    <div class="row"><span class="av">✨</span><div><b>Candidate Evaluation</b><br><small style="color:var(--mute)">AI Automation Specialist</small></div><span class="sc">94%</span></div>
+    <small style="color:var(--mute);font-weight:700">Technical &amp; Workflow Match</small><div class="bar"><i style="--w:94%"></i></div>
+    <small style="color:var(--mute);font-weight:700">Experience &amp; Project Fit</small><div class="bar"><i style="--w:88%"></i></div>
+    <div class="row"><span class="chip g">💖 Invited to Interview</span><span style="color:var(--mute);margin-left:auto;font-size:13px">Auto-email sent</span></div>
+    <div class="row"><span class="chip">🌷 Borderline Cases</span><span style="color:var(--mute);margin-left:auto;font-size:13px">Routed to HR Review</span></div>
+  </div>
+</section>
+
+<div class="stack">
+  <p>✨ Powered by self-hosted Docker &amp; production AI stack ✨</p>
+  <span>🌸 n8n Automation</span><span>📊 Google Sheets</span><span>☁️ Google Drive</span><span>💌 Gmail</span><span>✨ Gemini 3.1 &amp; 2.5 Flash-Lite</span><span>⚡ Groq gpt-oss-120b</span>
+</div>
+
+<section id="how">
+  <h2>Five workflows, one hiring pipeline 🌷</h2>
+  <p class="sub">Pick any workflow below to view its trigger, AI models, and internal node chain—or download the sanitized JSON file directly.</p>
+  <div class="tabs" id="tabs" role="tablist">
+    <button type="button" class="on" onclick="window.showWorkflow(0)">🌸 Candidate Intake</button>
+    <button type="button" onclick="window.showWorkflow(1)">✨ AI Resume Screening</button>
+    <button type="button" onclick="window.showWorkflow(2)">🎀 SmartJob Coach</button>
+    <button type="button" onclick="window.showWorkflow(3)">💬 HR Policy RAG</button>
+    <button type="button" onclick="window.showWorkflow(4)">🛡️ Error Handler</button>
+  </div>
+  <div class="offer" id="offer">
+    <div>
+      <h3>Candidate Intake</h3>
+      <p>Candidates apply with a PDF CV. The workflow validates fields, checks Google Sheets for duplicate applications, stores the CV in Google Drive, and logs the record.</p>
+      <div class="meta">
+        <span class="chip">11 Nodes</span>
+        <span class="chip">n8n Form Trigger</span>
+        <span class="chip g">Rule-based + JS Validation</span>
+      </div>
+      <a class="btn o sm" href="./intake.json" download="intake.json">⬇ Download intake.json</a>
+    </div>
+    <div class="steps">
+      <div>🌸 On form submission</div>
+      <div>🌸 Code in JavaScript → If (validation)</div>
+      <div>🌸 Get row(s) in sheet (duplicate check)</div>
+      <div>🌸 Upload file (Google Drive)</div>
+      <div>🌸 Append row in sheet</div>
+      <div>🌸 Form2 (confirmation page)</div>
+    </div>
+  </div>
+</section>
+
+<section id="agents-section">
+  <h2>Specialist AI agents behind the scenes ✨</h2>
+  <p class="sub">Six autonomous LLM steps operating across your recruitment and policy workflows.</p>
+  <div class="grid" id="agents">
+    <div class="card"><b>01</b><h4>Candidate Profile Extractor</h4><p>Converts raw PDF resume text or OCR output into structured skills, experience, and education JSON.</p></div>
+    <div class="card"><b>02</b><h4>Evaluation Scorer</h4><p>Scores candidates objectively against role criteria using a self-correcting structured output schema.</p></div>
+    <div class="card"><b>03</b><h4>CV Matcher Agent</h4><p>Compares candidate CVs against target job descriptions to highlight strengths and missing keywords.</p></div>
+    <div class="card"><b>04</b><h4>Cover Letter Writer</h4><p>Generates a tailored, role-specific cover letter aligned with the candidate's verified experience.</p></div>
+    <div class="card"><b>05</b><h4>Interview Coach Agent</h4><p>Prepares targeted technical and behavioral interview questions with suggested answer frameworks.</p></div>
+    <div class="card"><b>06</b><h4>Bilingual HR RAG Agent</h4><p>Retrieves exact clauses from company policy docs and responds naturally in English or Arabic.</p></div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <h2>How the workflows connect 💖</h2>
+  <p class="sub">Google Sheets acts as the central state ledger, while the Global Error Handler monitors every pipeline stage.</p>
+  <div class="portal">
+    <svg id="viz" viewBox="0 0 900 380" role="img" aria-label="Pipeline diagram of the five workflows">
+      <path id="p0" class="e" d="M115 75 C282 75 282 190 450 190"/>
+      <path id="p1" class="e" d="M450 190 C617 190 617 75 785 75"/>
+      <path id="p2" class="e" d="M785 75 C785 192 785 192 785 310"/>
+      <path id="p3" class="e" d="M115 310 C450 310 450 310 785 310"/>
+      <path id="p4" class="e" d="M450 325 C617 325 617 310 785 310"/>
+      <circle r="6" fill="#ec4899"><animateMotion dur="3.0s" repeatCount="indefinite"><mpath href="#p0"/></animateMotion></circle>
+      <circle r="6" fill="#f472b6"><animateMotion dur="3.4s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+      <circle r="6" fill="#c084fc"><animateMotion dur="3.8s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+      <circle r="6" fill="#fb7185"><animateMotion dur="4.2s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+      <circle r="6" fill="#e879f9"><animateMotion dur="3.6s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+      <g class="n"><rect x="29" y="43" width="172" height="64" rx="18" stroke="#ec4899"/><text x="115" y="71" text-anchor="middle">Candidate Intake</text><text x="115" y="91" text-anchor="middle" class="s">Form → Drive + Sheets</text></g>
+      <g class="n"><rect x="364" y="158" width="172" height="64" rx="18" stroke="#f472b6"/><text x="450" y="186" text-anchor="middle">Google Sheets</text><text x="450" y="206" text-anchor="middle" class="s">Central State Ledger</text></g>
+      <g class="n"><rect x="699" y="43" width="172" height="64" rx="18" stroke="#10b981"/><text x="785" y="71" text-anchor="middle">AI Screening</text><text x="785" y="91" text-anchor="middle" class="s">Gemini + Groq → Gmail</text></g>
+      <g class="n"><rect x="29" y="278" width="172" height="64" rx="18" stroke="#c084fc"/><text x="115" y="306" text-anchor="middle">Application Coach</text><text x="115" y="326" text-anchor="middle" class="s">Orchestrator + 3 Tools</text></g>
+      <g class="n"><rect x="364" y="293" width="172" height="64" rx="18" stroke="#e879f9"/><text x="450" y="321" text-anchor="middle">HR Policy RAG</text><text x="450" y="341" text-anchor="middle" class="s">Vector Store Chat</text></g>
+      <g class="n"><rect x="699" y="278" width="172" height="64" rx="18" stroke="#fb7185"/><text x="785" y="306" text-anchor="middle">Error Handler</text><text x="785" y="326" text-anchor="middle" class="s">Throttle + Digest</text></g>
+    </svg>
+  </div>
+</section>
+
+<section id="portal">
+  <h2>Try the Live Recruitment Portal 🌸</h2>
+  <p class="sub">Interact directly with our RAG Policy Assistant, submit a job application, or run the AI Career Coach.</p>
+  <div class="portal">
+    <div class="tabs" id="ptabs" role="tablist">
+      <button type="button" class="on" data-t="chat" onclick="window.switchPortalTab('chat')">💬 Ask HR Policy Assistant</button>
+      <button type="button" data-t="apply" onclick="window.switchPortalTab('apply')">📄 Apply for a Job</button>
+      <button type="button" data-t="coach" onclick="window.switchPortalTab('coach')">🎀 Get AI CV Coaching</button>
+    </div>
+
+    <div id="p-chat">
+      <div class="chat-toolbar">
+        <div class="quick-chips">
+          <button type="button" onclick="window.askQuick('How many annual leave days do I get?')">🌸 Annual leave days?</button>
+          <button type="button" onclick="window.askQuick('What are the working hours and remote work policy?')">✨ Remote work policy?</button>
+          <button type="button" onclick="window.askQuick('ما هي سياسة الإجازات السنوية والمرضية في الشركة؟')">🌷 سياسة الإجازات بالعربية؟</button>
+        </div>
+        <button type="button" id="clearChat" class="btn o sm" onclick="window.initGreeting()">Clear Chat</button>
+      </div>
+      <div id="log" aria-live="polite">
+        <div class="m b" dir="auto">Hi there! 🌸 Welcome to <strong>SM Company (OMNA People)</strong>. Ask me anything about HR policies, annual leave, or remote work in <strong>English</strong> or <strong>العربية</strong> ✨</div>
+      </div>
+      <form id="cf">
+        <input id="ci" dir="auto" placeholder="Ask about leave, benefits, policies… (English or العربية) 🌸" aria-label="Message" autocomplete="off" required>
+        <button class="btn" type="submit" id="sendBtn">Send 💖</button>
+      </form>
+    </div>
+
+    <div id="p-apply" hidden>
+      <form id="customApplyForm" class="custom-form-grid">
+        <div class="field">
+          <label>Full Name <span>*Required</span></label>
+          <input type="text" id="apName" placeholder="e.g., Salma Ahmed" required>
+        </div>
+        <div class="field">
+          <label>Email Address <span>*Required</span></label>
+          <input type="email" id="apEmail" placeholder="name@example.com" required>
+        </div>
+        <div class="field">
+          <label>Target Position <span>*Required</span></label>
+          <select id="apRole" required>
+            <option value="AI Automation Engineer">AI Automation Engineer</option>
+            <option value="Backend / Systems Integration Engineer">Backend / Systems Integration Engineer</option>
+            <option value="Data Scientist / ML Engineer">Data Scientist / ML Engineer</option>
+            <option value="Senior Accountant">Senior Accountant</option>
+            <option value="HR Operations Specialist">HR Operations Specialist</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Phone / WhatsApp</label>
+          <input type="tel" id="apPhone" placeholder="+20 100 000 0000">
+        </div>
+        <div class="field full">
+          <label>Upload Resume / CV (PDF) <span>*Required</span></label>
+          <div class="dropzone" id="apDrop">
+            <input type="file" id="apFile" accept=".pdf" required>
+            <div class="dropzone-title">🌸 Drag &amp; drop your CV (PDF) here, or click to browse</div>
+            <div class="dropzone-sub">Automatically uploaded to Google Drive &amp; scanned by Gemini OCR ✨</div>
+            <div id="apFileBadge" class="file-badge" style="display:none"></div>
+          </div>
+        </div>
+        <div class="field full">
+          <label>Why do you want to join SM Company? <span>*Required</span></label>
+          <textarea id="apWhy" rows="3" placeholder="Share your key strengths, projects, and career goals…" required></textarea>
+        </div>
+        <div class="form-footer">
+          <span style="font-size:13px;color:var(--mute)">💖 Connected to live n8n Candidate Intake workflow</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="submit" class="btn">Submit Application ↗</button>
+            <a id="directApplyBtn" href="https://fraying-parmesan-flashing.ngrok-free.dev/form/5cb59b07-017b-4e3e-aa34-8d570cdf6b8d" target="_blank" rel="noopener" class="btn o">Open Direct n8n Form</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="p-coach" hidden>
+      <form id="customCoachForm" class="custom-form-grid">
+        <div class="field">
+          <label>Your Email (to receive the AI Report) <span>*Required</span></label>
+          <input type="email" id="coEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label>Target Role Title <span>*Required</span></label>
+          <input type="text" id="coRole" placeholder="e.g., AI Automation & Systems Integration Engineer" required>
+        </div>
+        <div class="field full">
+          <label>Upload Your Current CV (PDF) <span>*Required</span></label>
+          <div class="dropzone" id="coDrop">
+            <input type="file" id="coFile" accept=".pdf" required>
+            <div class="dropzone-title">🎀 Drop your PDF Resume here for 3-Agent Analysis</div>
+            <div class="dropzone-sub">Analyzed by CV Matcher, Cover Letter Writer &amp; Interview Coach ✨</div>
+            <div id="coFileBadge" class="file-badge" style="display:none"></div>
+          </div>
+        </div>
+        <div class="field full">
+          <label>
+            <span>Target Job Description <span>*Required</span></span>
+            <button type="button" id="fillSampleJD" class="btn o sm" onclick="window.fillJobDesc()" style="padding:4px 12px;font-size:11.5px">✨ Auto-Fill Sample JD</button>
+          </label>
+          <textarea id="coJD" rows="5" placeholder="Paste the full job description here so the AI can score your CV gaps and tailor your cover letter…" required></textarea>
+        </div>
+        <div class="form-footer">
+          <span style="font-size:13px;color:var(--mute)">🌸 Generates ATS Match Score + Custom Cover Letter + Interview Prep</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="submit" class="btn">Generate AI Coaching Report ↗</button>
+            <a id="directCoachBtn" href="https://fraying-parmesan-flashing.ngrok-free.dev/form/31edd6c0-a8ed-4e6c-8e1e-8b39cab350b6" target="_blank" rel="noopener" class="btn o">Open Direct n8n Form</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Experience autonomous HR workflows in action ✨</h2>
+  <a class="btn" href="#portal" onclick="window.switchPortalTab('apply')">🌸 Apply for a Job</a>
+  <a class="btn" href="#portal" onclick="window.switchPortalTab('coach')">🎀 Get CV Coaching</a>
+</div>
+
+<footer>
+  <b>🌸 SM Company (OMNA People) — AI Recruitment Portal</b>
+  <span>Engineered with n8n, Docker, Google Workspace, Gemini &amp; Groq 💖</span>
+</footer>
+
+<script>
+const CONFIG = {
+  n8nBase: "https://fraying-parmesan-flashing.ngrok-free.dev",
+  chat: "/webhook/1fae1be7-45be-4056-b798-214e6edb08b0/chat",
+  applyForm: "/form/5cb59b07-017b-4e3e-aa34-8d570cdf6b8d",
+  coachForm: "/form/31edd6c0-a8ed-4e6c-8e1e-8b39cab350b6"
+};
+const HEADERS = { "Content-Type": "application/json", "ngrok-skip-browser-warning": "1" };
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+window.applyTheme = function(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  try { localStorage.setItem("sm_cute_theme", t); } catch(e) {}
+  const icon = $("#themeIcon"), lbl = $("#themeLabel");
+  if (icon) icon.textContent = t === "dark" ? "☀️" : "🌙";
+  if (lbl) lbl.textContent = t === "dark" ? "Light Pink" : "Dark";
+};
+window.toggleSiteTheme = function() {
+  const cur = document.documentElement.getAttribute("data-theme") || "light";
+  window.applyTheme(cur === "light" ? "dark" : "light");
+};
+try {
+  const saved = localStorage.getItem("sm_cute_theme") || "light";
+  window.applyTheme(saved);
+} catch(e) {}
+
+const WF = [
+  { file: "intake.json", name: "Candidate Intake", nodes: 11, trig: "n8n Form Trigger", ai: "Rule-based + JS Validation", d: "Candidates apply with a PDF CV. The workflow validates fields, checks Google Sheets for duplicate applications, stores the CV in Google Drive, and logs the record.", s: ["On form submission", "Code in JavaScript → If (validation)", "Get row(s) in sheet (duplicate check)", "Upload file (Google Drive)", "Append row in sheet", "Form2 (confirmation page)"] },
+  { file: "AI scan.json", name: "AI Resume Screening", nodes: 30, trig: "Hourly Schedule / Manual", ai: "Gemini 3.1 & 2.5 Flash-Lite + Groq", d: "Picks up new applications, reads each CV (with OCR fallback for scanned PDFs), extracts structured candidate data, scores against job criteria, and emails candidates.", s: ["Get New Applications → Loop Over Items", "Extract from File / OCR Scanned CV", "Extract Candidate Profile", "Evaluation Schema (Auto-fix)", "Validate Evaluation → Switch", "Invite / Brief HR / Flag Borderline", "Update row in sheet"] },
+  { file: "SmartJob Application Coach.json", name: "SmartJob Application Coach", nodes: 14, trig: "n8n Form Trigger", ai: "Gemini 3.1 + Groq (3 Specialist Agents)", d: "Candidates upload a CV and target job description. An orchestrator agent invokes three specialist tools (Matcher, Cover Letter, Interview Coach) and emails a full report.", s: ["Job application form", "Read CV (Gemini)", "Career Coach Orchestrator", "CV Matcher Tool", "Cover Letter Tool", "Interview Coach Tool", "Markdown → Send Gmail"] },
+  { file: "Rag.json", name: "HR Policy RAG Assistant", nodes: 11, trig: "Chat Webhook + Document Loader", ai: "Gemini Flash-Lite + Gemini Embeddings", d: "HR policy documents are chunked, embedded, and indexed in an in-memory vector store. The bilingual chat agent answers questions in English and Arabic with conversational memory.", s: ["Upload policy files", "Recursive Character Text Splitter", "Default Data Loader", "Simple Vector Store (hr_policies)", "When chat message received", "AI Agent + Window Buffer Memory"] },
+  { file: "Error Handling.json", name: "Global Error Handler", nodes: 18, trig: "Error Trigger + Scheduled Audits", ai: "Automated Classification & Throttling", d: "Captures workflow failures across the pipeline, throttles duplicate alerts, detects stuck candidate applications, logs incidents in Sheets, and dispatches Gmail digests.", s: ["Error Trigger → Classify Error", "Check Alert Throttle", "Find Stuck Applications", "Build HTML Digest", "Send Alert (Gmail)", "Append Error Log in Sheet"] }
+];
+
+$("#menu").innerHTML = WF.map((w, i) => `<a href="#how" onclick="window.showWorkflow(${i})">🌸 ${w.name}<small>${w.trig}</small></a>`).join("");
+
+window.showWorkflow = function(i) {
+  const w = WF[i];
+  $$("#tabs button").forEach((b, k) => b.classList.toggle("on", k === i));
+  $("#offer").innerHTML = `<div><h3>${w.name}</h3><p>${w.d}</p><div class="meta"><span class="chip">${w.nodes} Nodes</span><span class="chip">${w.trig}</span><span class="chip g">${w.ai}</span></div><a class="btn o sm" href="./${encodeURIComponent(w.file)}" download="${w.file}">⬇ Download ${w.file}</a></div><div class="steps">${w.s.map(x => `<div>🌸 ${x}</div>`).join("")}</div>`;
+};
+
+window.switchPortalTab = function(t) {
+  $$("#ptabs button").forEach(x => x.classList.toggle("on", x.dataset.t === t));
+  ["chat", "apply", "coach"].forEach(k => { const el = $("#p-" + k); if (el) el.hidden = (k !== t); });
+};
+
+function bindFileDrop(inpSel, badgeSel) {
+  const inp = $(inpSel), badge = $(badgeSel);
+  if (!inp || !badge) return;
+  inp.addEventListener("change", () => {
+    if (inp.files && inp.files[0]) {
+      badge.textContent = "💖 Selected: " + inp.files[0].name;
+      badge.style.display = "inline-block";
+    }
+  });
+}
+bindFileDrop("#apFile", "#apFileBadge");
+bindFileDrop("#coFile", "#coFileBadge");
+
+window.fillJobDesc = function() {
+  $("#coRole").value = "AI Automation & Systems Integration Engineer";
+  $("#coJD").value = ["Role: AI Automation & Systems Integration Engineer", "Responsibilities:", "- Design, build, and maintain multi-step automated workflows in self-hosted n8n.", "- Integrate LLMs (Google Gemini, Groq, OpenAI) for RAG assistants, OCR resume screening, and AI agents.", "- Connect REST APIs, webhooks, Google Workspace (Sheets, Drive, Gmail), and PostgreSQL/Supabase.", "- Manage Docker containers and implement global error-handling pipelines."].join(String.fromCharCode(10));
+};
+
+const applyUrl = CONFIG.n8nBase + CONFIG.applyForm;
+const coachUrl = CONFIG.n8nBase + CONFIG.coachForm;
+$("#customApplyForm").addEventListener("submit", e => {
+  e.preventDefault();
+  window.open(applyUrl, "n8nApplyWindow", "width=760,height=840,resizable=yes,scrollbars=yes");
+});
+$("#customCoachForm").addEventListener("submit", e => {
+  e.preventDefault();
+  if (navigator.clipboard && $("#coJD").value) navigator.clipboard.writeText($("#coJD").value).catch(() => {});
+  window.open(coachUrl, "n8nCoachWindow", "width=760,height=840,resizable=yes,scrollbars=yes");
+});
+
+const sid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now());
+function setServerStatus(online, label) {
+  const pill = $("#statusBtn"), txt = $("#statusTxt");
+  if (!pill || !txt) return;
+  pill.className = "status-pill " + (online ? "on" : "off");
+  txt.textContent = label || (online ? "System Online ✨" : "Tunnel Offline");
+}
+
+window.checkServerStatus = async function() {
+  const txt = $("#statusTxt");
+  if (txt) txt.textContent = "Pinging…";
+  try {
+    const r = await fetch(CONFIG.n8nBase + CONFIG.chat, {
+      method: "POST",
+      headers: HEADERS,
+      body: JSON.stringify({ action: "loadPreviousSession", sessionId: sid })
+    });
+    if (r.ok) setServerStatus(true, "System Online ✨");
+    else if (r.status === 404) setServerStatus(true, "Tunnel Online (Activate RAG)");
+    else setServerStatus(false, "HTTP " + r.status);
+  } catch (e) {
+    setServerStatus(false, "Tunnel Offline");
+  }
+};
+window.checkServerStatus();
+
+const log = $("#log"), ci = $("#ci");
+const NL = String.fromCharCode(10);
+
+function formatMarkdown(str) {
+  const escaped = String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").split(NL + "- ").join("<br>🌸 ").split(NL).join("<br>");
+}
+
+function appendMessage(text, cls) {
+  const d = document.createElement("div");
+  d.className = "m " + cls;
+  d.dir = "auto";
+  if (cls.indexOf("b") !== -1) d.innerHTML = formatMarkdown(text);
+  else d.textContent = text;
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+  return d;
+}
+
+window.initGreeting = function() {
+  log.innerHTML = "";
+  appendMessage("Hi there! 🌸 Welcome to **SM Company (OMNA People)**. Ask me anything about HR policies, annual leave, or remote work in **English** or **العربية** ✨", "b");
+};
+
+window.askQuick = function(q) {
+  ci.value = q;
+  $("#cf").requestSubmit();
+};
+
+async function sendChatQuery(q) {
+  let lastStatus = 0;
+  for (const path of [CONFIG.chat, CONFIG.chat.replace("/webhook/", "/webhook-test/")]) {
+    const r = await fetch(CONFIG.n8nBase + path, {
+      method: "POST",
+      headers: HEADERS,
+      body: JSON.stringify({ action: "sendMessage", sessionId: sid, chatInput: q })
+    });
+    if (r.ok) {
+      setServerStatus(true, "System Online ✨");
+      const raw = await r.text();
+      try {
+        const j = JSON.parse(raw);
+        return j.output || j.text || j.message || raw;
+      } catch (e) {
+        return raw || "No response received.";
+      }
+    }
+    lastStatus = r.status;
+    if (r.status !== 404) break;
+  }
+  throw new Error(lastStatus === 404 ? "HTTP 404: The RAG workflow is not Active in n8n yet." : "HTTP " + lastStatus);
+}
+
+$("#cf").addEventListener("submit", async e => {
+  e.preventDefault();
+  const q = ci.value.trim();
+  if (!q) return;
+  ci.value = "";
+  appendMessage(q, "u");
+  const botBubble = appendMessage("Thinking… 🌸", "b");
+  try {
+    const reply = await sendChatQuery(q);
+    botBubble.innerHTML = formatMarkdown(reply);
+  } catch (err) {
+    botBubble.className = "m b err";
+    botBubble.innerHTML = `<strong>Couldn't reach the n8n assistant (${err.message}).</strong><div class="err-help">1. Keep your <b>ngrok</b> terminal open.<br>2. Open <b>Rag.json</b> in n8n, toggle the workflow <b>Active</b>, and inside <b>When chat message received</b> enable <b>Make Chat Publicly Available</b> + set Allowed Origins (CORS) to <code>*</code>.</div>`;
+  }
+  log.scrollTop = log.scrollHeight;
+});
+</script>
+</body>
+</html>
